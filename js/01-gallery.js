@@ -1,25 +1,30 @@
 import { galleryItems } from './gallery-items.js';
 // Change code below this line
 
-const galleryBox = document.querySelector('.gallery');
 const render = galleryItems.map(item => `<div class="gallery__item">
 <a class:"gallery__link" href="${item.original}">
 <img class: "gallery__image" src="${item.preview}"
 data-source="${item.original}"
-alt= "${item.description}"/></a></div>`).join(" ");
+alt= "${item.description}"/></a></div>`).join("");
 
-galleryBox.insertAdjacentHTML("beforeend", render)
+const galleryBox = document.querySelector('.gallery');
 
-galleryBox.addEventListener("click", onClick);
+galleryBox.insertAdjacentHTML("beforeend", render);
 
-function original(e) {
-e.preventDefault()
-if(e.target === e.curentTarget) return;
+galleryBox.addEventListener("click", e => {
+    e.preventDefault();
+    if(e.target === e.curentTarget) {
+        return
+    }
 
-const currentImage = e.target;
-console.log(`"Current image:${currentImage.dataset.source}"`);
+    const imageOriginal = e.target.getAttribute("data-source")
 const instance = basicLightbox.create(
-    `<div class: "modal"> <img src= "${currentImage.dataset.source}"/>
-</div>`)
-instance.show()
-}
+            `<img src= "${imageOriginal}"/>`)
+        instance.show()
+    
+galleryBox.addEventListener("keydown", e => {
+            if(e.key === "Escape") {
+                instance.close();
+            }
+        })
+    })
